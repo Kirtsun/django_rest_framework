@@ -1,8 +1,11 @@
-from .models import Post, Comment
-from .permissions import IsOwnerOrReadOnly
-from .serializers import UserSerializer, PostSerializer, CommentSerializer
 from django.contrib.auth import get_user_model
-from rest_framework import viewsets, permissions
+
+from drf.permissions import IsOwnerOrReadOnly
+
+from rest_framework import permissions, viewsets
+
+from .models import Comment, Post
+from .serializers import CommentSerializer, PostSerializer, UserSerializer
 
 User = get_user_model()
 
@@ -27,5 +30,4 @@ class CommentViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user, post=self.request.post)
-
+        serializer.save(author=self.request.user)
