@@ -10,5 +10,21 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'post']
+        fields = ['url', 'id', 'username', 'post']
 
+
+class PostSerializer(serializers.HyperlinkedModelSerializer):
+    author = serializers.ReadOnlyField(source='author.username')
+
+    class Meta:
+        model = Post
+        fields = ['url', 'title', 'text', 'create', 'author']
+
+
+class CommentSerializer(serializers.HyperlinkedModelSerializer):
+    author = serializers.ReadOnlyField(source='author.username')
+    post = serializers.ReadOnlyField(source='post.title')
+
+    class Meta:
+        model = Comment
+        fields = ['url', 'text', 'create', 'author', 'post']
